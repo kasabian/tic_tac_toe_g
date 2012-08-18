@@ -1,0 +1,139 @@
+require "tic_tac_toe/version"
+
+module TicTacToe
+#*******************Класс доска****************************
+  class Board
+
+  attr_reader :cells
+
+  def initialize(cells = [[nil, nil, nil],
+                          [nil, nil, nil],
+                          [nil, nil, nil]])
+    
+          validate cells
+          @cells = cells
+        
+          
+  end
+   
+  def move (x,y,z)
+    
+   if (x>2)||(y>2)||(z>1) then raise ArgumentError end
+   if (x<0)||(y<0)||(z<0) then raise ArgumentError end
+   
+   if @cells[x][y] == nil then @cells[x][y]=z
+                     else raise ArgumentError
+   
+    end            
+
+ end 
+
+  def clear
+    cl=[[nil,nil,nil]]*3
+    @cells=cl 
+  end 
+
+  def empty?
+     @cells.flatten.all? do |cell|
+      cell.nil?
+    end
+  end
+   
+   
+ 
+
+
+  private
+
+  def validate cells
+    raise ArgumentError unless cells.length == 3
+    cells.each do |row|
+      raise ArgumentError unless row.length == 3
+      row.each { |cell| raise ArgumentError unless [nil, 0, 1].include? cell }
+    end
+  end
+
+end
+
+#**********************Класс игра************************
+class Game
+   def initialize 
+    @cells=[]
+   end
+ 
+  def finish_game(arr)
+    f=nil
+    temp=[]
+    if arr.class != Array then raise ArgumentError end
+    # Проверяю  ряды на совпадения 
+     arr.each do |row|
+      if row == [1,1,1] then f="X" end
+      if row == [0,0,0] then f="0" end  
+    end
+  
+    # Проверяю столбики на совпадения
+      
+      3.times do |i|
+        temp=[]
+         arr.each do |row|
+           temp.push row [i] 
+         end
+  
+          if temp == [1,1,1] then f="X" end
+          if temp == [0,0,0] then f="0" end
+      end
+    # Проверяю диагонали на совпадения     
+   
+      temp=[]
+
+      3.times do |i| 
+        temp.push arr[i][i]
+      end 
+       
+       if temp == [1,1,1] then f="X" end
+       if temp == [0,0,0] then f="0" end
+
+         
+      temp=[]
+
+      3.times do |i| 
+        temp.push arr[i][2-i]
+      end 
+       
+       if temp == [1,1,1] then f="X" end
+       if temp == [0,0,0] then f="0" end
+
+        
+      # Если f равен nil, проверяю есть ли ход
+       if arr.flatten.include?(nil) == false then
+                f="no winner" 
+
+       end       
+
+ 
+    if arr.include?(nil) == true then f=nil end
+   return f
+
+  end
+
+end
+
+
+ #****************Класс игрок******************************
+  class Player 
+ 
+ attr_reader :name
+
+ def initialize (name)
+
+   if name !=nil then @name=name
+                 else rais ArgumentError
+   end              
+
+
+
+ end
+
+end
+
+end
